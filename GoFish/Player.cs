@@ -8,7 +8,7 @@ namespace GoFish
 {
     public class Player
     {
-        public static Random random = new Random();
+        public static Random Random = new Random();
 
         private List<Card> hand = new List<Card>();
         private List<Values> books = new List<Values>();
@@ -35,7 +35,7 @@ namespace GoFish
         /// <summary>
         /// Returns the current status of the player: the number cards and books
         /// </summary>
-        public string Status => $"{Name} has {hand.Count} card{S(hand.Count)} and {books.Count} books";
+        public string Status => $"{Name} has {hand.Count} card{S(hand.Count)} and {books.Count} book{S(books.Count)}";
 
         /// <summary>
         /// Constructor to create player
@@ -60,7 +60,10 @@ namespace GoFish
         /// <param name="stock">Stock to get the next hand from</param>
         public void GetNextHand(Deck stock)
         {
-            hand = stock.Take(5).ToList();
+            while ((stock.Count() > 0) && (hand.Count < 5))
+            {
+                hand.Add(stock.Deal(0));
+            }
         }
 
         /// <summary>
@@ -70,17 +73,17 @@ namespace GoFish
         /// <param name="value">Value I'm asked for</param>
         /// <param name="card">Deck to draw my next hand from</param>
         /// <returns>The cards that were pulled out of the other player's hand</returns>
-        public IEnumerable<Card> DoYouHaveAny(Values value, Deck card)
+        public IEnumerable<Card> DoYouHaveAny(Values value, Deck deck)
         {
-            List<Card> matches = hand.Where(card => card.Value == value).OrderBy(card => card).ToList();
+            var matchingCards = hand.Where(card => card.Value == value)
+                .OrderBy(card => card);
 
-            if (matches.Count > 0)
-                hand.RemoveAll(card => card.Value == value);
+            hand = hand.Where(card => card.Value != value).ToList();
 
-            if(hand.Count < 1)
-                GetNextHand(card);
+            if(hand.Count() == 0)
+                GetNextHand(deck);
 
-            return matches;
+            return matchingCards;
         }
 
         public void AddCardsAndPullOutBooks(IEnumerable<Card> cards)

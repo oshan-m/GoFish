@@ -61,5 +61,63 @@ namespace GoFishTests
 
             Assert.AreEqual("Owen has 1 card and 0 books", player.Status);
         }
+
+
+        [TestMethod]
+        public void TestAddCardsAndPullOutBooks()
+        {
+            IEnumerable<Card> cards = new List<Card>()
+            {
+                new Card(Values.Jack, Suits.Spades),
+                new Card(Values.Three, Suits.Clubs),
+                new Card(Values.Jack, Suits.Hearts),
+                new Card(Values.Three, Suits.Hearts),
+                new Card(Values.Four, Suits.Diamonds),
+                new Card(Values.Jack, Suits.Diamonds),
+                new Card(Values.Jack, Suits.Clubs),
+            };
+
+            var player = new Player("Ownen", cards);
+
+            Assert.AreEqual(0, player.Books.Count());
+
+            var cardsToAdd = new List<Card>()
+            {
+                new Card(Values.Three, Suits.Diamonds),
+                new Card(Values.Three, Suits.Spades),
+            };
+            player.AddCardsAndPullOutBooks(cardsToAdd);
+
+            var books = player.Books.ToList();
+            CollectionAssert.AreEqual(new List<Values>() { Values.Three, Values.Jack }, books);
+
+            var hand = player.Hand.Select(Card => Card.ToString()).ToList();
+            CollectionAssert.AreEqual(new List<string>() { "Four of Diamonds" }, hand);
+
+            Assert.AreEqual("Owen has 1 card and 2 books", player.Status);
+        }
+
+        [TestMethod]
+        public void TestDrawCard()
+        {
+            var player = new Player("Owen", new List<Card>());
+            player.DrawCard(new Deck());
+            Assert.AreEqual(1, player.Hand.Count());
+            Assert.AreEqual("Ace of Diamonds", player.Hand.First().ToString());
+        }
+
+        [TestMethod]
+        public void TestRandomValueFromHand()
+        {
+            var player = new Player("Owen", new Deck());
+
+            Player.Random = new MockRandom() { ValueToReturn = 0 };
+            Assert.AreEqual("Ace", player.RandomValueFromHand().ToString());
+            Player.Random = new MockRandom() { ValueToReturn = 4 };
+            Assert.AreEqual("Two", player.RandomValueFromHand().ToString());
+            Player.Random = new MockRandom() { ValueToReturn = 8 };
+            Assert.AreEqual("Three", player.RandomValueFromHand().ToString());
+        }
+
     }
 }
