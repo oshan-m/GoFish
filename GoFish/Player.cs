@@ -88,15 +88,29 @@ namespace GoFish
 
         public void AddCardsAndPullOutBooks(IEnumerable<Card> cards)
         {
-            throw new NotImplementedException();
+            hand.AddRange(cards);
+            var groups = hand.GroupBy(card => card.Value)
+                             .OrderBy(valueGroup => valueGroup.Key);
+            foreach (var group in groups)
+            {
+                if (group.Count() == 4)
+                {
+                    hand.RemoveAll(card => card.Value == group.Key);
+                    books.Add(group.Key);
+                }
+            }
         }
 
         public void DrawCard(Deck stock)
         {
-            throw new NotImplementedException();
+            if(stock.Count > 0)
+                AddCardsAndPullOutBooks(new List<Card>() { stock.Deal(0) });
         }
 
-        public Values RandomValuesFromHand() => throw new NotImplementedException();
+        public Values RandomValueFromHand() => hand.OrderBy(card => card.Value)
+            .Select(card => card.Value)
+            .Skip(Random.Next(hand.Count()))
+            .First();
 
         public override string ToString() => Name;
     }

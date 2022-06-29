@@ -77,7 +77,7 @@ namespace GoFishTests
                 new Card(Values.Jack, Suits.Clubs),
             };
 
-            var player = new Player("Ownen", cards);
+            var player = new Player("Owen", cards);
 
             Assert.AreEqual(0, player.Books.Count());
 
