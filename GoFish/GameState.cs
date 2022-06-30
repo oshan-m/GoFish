@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace GoFish
 {
-    class GameState
+    public class GameState
     {
         public readonly IEnumerable<Player> Players;
         public readonly IEnumerable<Player> Opponents;
@@ -19,15 +20,31 @@ namespace GoFish
         /// <param name="stock">Shuffled stock of cards to deal from</param>
         public GameState(string humanPlayerName, IEnumerable<string> opponentNames, Deck stock)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            HumanPlayer = new Player(humanPlayerName);
+            List<Player> listOfPlayers = new List<Player>() { HumanPlayer };
+            List<Player> listOfOpponents = new List<Player>();
+            foreach (var name in opponentNames)
+            { 
+                listOfPlayers.Add(new Player(name));
+                listOfOpponents.Add(new Player(name));
+            }
+            Players = listOfPlayers;
+            Opponents = listOfOpponents;
+
+            foreach (var player in Players)
+            {
+                player.GetNextHand(stock);
+            }
         }
-        /// <summary>
+        /// <summary> 
         /// Gets a random player that doesn't match the current player
         /// </summary>
         /// <param name="currentPlayer">The current player</param>
         /// <returns>A random player that the current player can ask for a card</returns>
-        public Player RandomPlayer(Player currentPlayer) =>
-        throw new NotImplementedException();
+        public Player RandomPlayer(Player currentPlayer) => Players.Where(player => player != currentPlayer)
+            .Skip(Player.Random.Next( Players.Count() -1))
+            .First();
         /// <summary>
         /// Makes one player play a round
         /// </summary>
