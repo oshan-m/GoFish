@@ -48,21 +48,21 @@ namespace GoFishTests
             var deck = new Deck();
             deck.Clear();
             var cardsToAdd = new List<Card>() {
-             // Cards the game will deal to Owen
-             new Card(Values.Jack, Suits.Spades),
-             new Card(Values.Jack, Suits.Hearts),
-             new Card(Values.Six, Suits.Spades),
-             new Card(Values.Jack, Suits.Diamonds),
-             new Card(Values.Six, Suits.Hearts),
-              // Cards the game will deal to Brittney
-             new Card(Values.Six, Suits.Diamonds),
-             new Card(Values.Six, Suits.Clubs),
-             new Card(Values.Seven, Suits.Spades),
-             new Card(Values.Jack, Suits.Clubs),
-             new Card(Values.Nine, Suits.Spades),
-             // Two more cards in the deck for Owen to draw when he runs out
-             new Card(Values.Queen, Suits.Hearts),
-             new Card(Values.King, Suits.Spades),
+                 // Cards the game will deal to Owen
+                 new Card(Values.Jack, Suits.Spades),
+                 new Card(Values.Jack, Suits.Hearts),
+                 new Card(Values.Six, Suits.Spades),
+                 new Card(Values.Jack, Suits.Diamonds),
+                 new Card(Values.Six, Suits.Hearts),
+                  // Cards the game will deal to Brittney
+                 new Card(Values.Six, Suits.Diamonds),
+                 new Card(Values.Six, Suits.Clubs),
+                 new Card(Values.Seven, Suits.Spades),
+                 new Card(Values.Jack, Suits.Clubs),
+                 new Card(Values.Nine, Suits.Spades),
+                 // Two more cards in the deck for Owen to draw when he runs out
+                 new Card(Values.Queen, Suits.Hearts),
+                 new Card(Values.King, Suits.Spades),
              };
             foreach (var card in cardsToAdd)
                 deck.Add(card);
